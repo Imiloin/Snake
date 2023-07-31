@@ -1,22 +1,22 @@
 import pygame
+import Constants
 from Elements import Snake, Food
 
 # 游戏常量
-SCREEN_WIDTH = 640
-SCREEN_HEIGHT = 480
-PANEL_HEIGHT = 50
-BLOCK_SIZE = 10
-SPEED = 5
+SCREEN_WIDTH = Constants.SCREEN_WIDTH
+SCREEN_HEIGHT = Constants.SCREEN_HEIGHT
+PANEL_HEIGHT = Constants.PANEL_HEIGHT
+BLOCK_SIZE = Constants.BLOCK_SIZE
 
 # 颜色常量
-BLACK = (0, 0, 0)
-WHITE = (255, 255, 255)
-RED = (255, 0, 0)
-GREEN = (0, 255, 0)
-BLUE = (0, 0, 255)
+BLACK = Constants.BLACK
+WHITE = Constants.WHITE
+RED = Constants.RED
+GREEN = Constants.GREEN
+BLUE = Constants.BLUE
 
 # 其他常量
-FRAME = 1000 // SPEED
+FRAME = 1000 // Constants.SPEED
 GAME_WIDTH = SCREEN_WIDTH
 GAME_HEIGHT = SCREEN_HEIGHT - PANEL_HEIGHT
 
