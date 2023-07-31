@@ -13,7 +13,7 @@ GAME_HEIGHT = SCREEN_HEIGHT - PANEL_HEIGHT
 
 class Snake:
     def __init__(self):
-        self.body = [(GAME_WIDTH / 2, GAME_HEIGHT / 2)]
+        self.body = [((GAME_WIDTH // 2 // BLOCK_SIZE) * BLOCK_SIZE, (GAME_HEIGHT // 2 // BLOCK_SIZE) * BLOCK_SIZE)]
         self.direction = 'right'
         self.length = 1
 

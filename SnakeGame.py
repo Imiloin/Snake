@@ -29,10 +29,13 @@ class Game:
         self.snake = Snake()
         self.food = Food()
         self.food.spawn(self.snake)
+        self.score = 0
+        self.font = pygame.font.SysFont('Arial', 24)
 
     def update(self, direction):
         self.snake.direction = direction
         self.snake.move(self.food)
+        self.score = self.snake.length - 1
         if self.snake.check_game_over():
             pygame.quit()
             quit()
@@ -43,6 +46,14 @@ class Game:
             pygame.draw.rect(self.screen, GREEN, (block[0], block[1], BLOCK_SIZE, BLOCK_SIZE))
         pygame.draw.rect(self.screen, RED, (self.food.position[0], self.food.position[1], BLOCK_SIZE, BLOCK_SIZE))
         pygame.draw.line(self.screen, WHITE, (0, GAME_HEIGHT), (GAME_WIDTH, GAME_HEIGHT), 2)
+        # 创建一个文本Surface对象
+        score_surface = self.font.render('Score: {}'.format(self.score), True, WHITE)
+        # 获取文本Surface对象的矩形区域
+        score_rect = score_surface.get_rect()
+        # 将文本Surface对象居中放置在屏幕底部
+        score_rect.center = (SCREEN_WIDTH // 2, SCREEN_HEIGHT - PANEL_HEIGHT // 2)
+        # 将文本Surface对象绘制到屏幕上
+        self.screen.blit(score_surface, score_rect)
         pygame.display.update()
 
     def run(self):
