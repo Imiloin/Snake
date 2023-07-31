@@ -4,9 +4,9 @@ from Elements import Snake, Food
 # 游戏常量
 SCREEN_WIDTH = 640
 SCREEN_HEIGHT = 480
+PANEL_HEIGHT = 50
 BLOCK_SIZE = 10
 SPEED = 5
-FRAME = 1000 // SPEED
 
 # 颜色常量
 BLACK = (0, 0, 0)
@@ -15,6 +15,10 @@ RED = (255, 0, 0)
 GREEN = (0, 255, 0)
 BLUE = (0, 0, 255)
 
+# 其他常量
+FRAME = 1000 // SPEED
+GAME_WIDTH = SCREEN_WIDTH
+GAME_HEIGHT = SCREEN_HEIGHT - PANEL_HEIGHT
 
 class Game:
     def __init__(self):
@@ -38,6 +42,7 @@ class Game:
         for block in self.snake.body:
             pygame.draw.rect(self.screen, GREEN, (block[0], block[1], BLOCK_SIZE, BLOCK_SIZE))
         pygame.draw.rect(self.screen, RED, (self.food.position[0], self.food.position[1], BLOCK_SIZE, BLOCK_SIZE))
+        pygame.draw.line(self.screen, WHITE, (0, GAME_HEIGHT), (GAME_WIDTH, GAME_HEIGHT), 2)
         pygame.display.update()
 
     def run(self):
