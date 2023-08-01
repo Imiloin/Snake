@@ -3,6 +3,9 @@ SCREEN_WIDTH = 640
 SCREEN_HEIGHT = 480
 PANEL_HEIGHT = 50
 BLOCK_SIZE = 10
+
+DIFFICULTY = ['Easy', 'Normal', 'Hard']
+SNAKE_DISPLAY = ['Default', 'Gradient']
 SPEED = 5
 
 # 颜色常量

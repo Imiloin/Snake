@@ -6,6 +6,8 @@ import Constants
 BLOCK_SIZE = Constants.BLOCK_SIZE
 SCREEN_WIDTH = Constants.SCREEN_WIDTH
 SCREEN_HEIGHT = Constants.SCREEN_HEIGHT
+DIFFICULTY = Constants.DIFFICULTY
+SNAKE_DISPLAY = Constants.SNAKE_DISPLAY
 
 # 颜色常量
 BLACK = Constants.BLACK
@@ -107,15 +109,15 @@ class Settings:
         self.screen = screen
         self.font = pygame.font.SysFont('Minecraft Regular', 24)
         self.options = [
-            {'text': 'Difficulty', 'value': 1, 'min': 1, 'max': 5},
-            {'text': 'Display Mode', 'value': 0, 'min': 0, 'max': 1}
+            {'text': 'Difficulty', 'current_level': DIFFICULTY[0], 'current_index': 0, 'min': 0, 'max': len(DIFFICULTY) - 1, 'option_type': DIFFICULTY},
+            {'text': 'Snake Display', 'current_level': SNAKE_DISPLAY[0], 'current_index': 0, 'min': 0, 'max': len(SNAKE_DISPLAY) - 1, 'option_type': SNAKE_DISPLAY}
         ]
         self.selected_option = 0
 
     def draw(self):
         self.screen.fill(BLACK)
         for i, option in enumerate(self.options):
-            text_surface = self.font.render('{}: {}'.format(option['text'], option['value']), True, WHITE if i == self.selected_option else GRAY)
+            text_surface = self.font.render('{}: {}'.format(option['text'], option['current_level']), True, WHITE if i == self.selected_option else GRAY)
             text_rect = text_surface.get_rect()
             text_rect.center = (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + i * 30)
             self.screen.blit(text_surface, text_rect)
@@ -129,10 +131,12 @@ class Settings:
                 self.selected_option = (self.selected_option + 1) % len(self.options)
             elif event.key == pygame.K_LEFT or event.key == pygame.K_a:
                 option = self.options[self.selected_option]
-                option['value'] = max(option['min'], option['value'] - 1)
+                option['current_index'] = max(option['min'], option['current_index'] - 1)
+                option['current_level'] = option['option_type'][option['current_index']]
             elif event.key == pygame.K_RIGHT or event.key == pygame.K_d:
                 option = self.options[self.selected_option]
-                option['value'] = min(option['max'], option['value'] + 1)
+                option['current_index'] = min(option['max'], option['current_index'] + 1)
+                option['current_level'] = option['option_type'][option['current_index']]
             elif event.key == pygame.K_ESCAPE:
                 return 'back'
         return None
