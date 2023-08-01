@@ -20,6 +20,7 @@ FRAME = 1000 // Constants.SPEED
 GAME_WIDTH = SCREEN_WIDTH
 GAME_HEIGHT = SCREEN_HEIGHT - PANEL_HEIGHT
 
+
 class Game:
     def __init__(self):
         pygame.init()
@@ -30,7 +31,7 @@ class Game:
         self.food = Food()
         self.food.spawn(self.snake)
         self.score = 0
-        self.font = pygame.font.SysFont('Arial', 24)
+        self.font = pygame.font.SysFont('Minecraft Regular', 20)
 
     def update(self, direction):
         self.snake.direction = direction
