@@ -106,6 +106,7 @@ class Game:
                     elif action == 'quit':
                         pygame.quit()
                         quit()
+                    self.clock.tick(30)
             elif self.state == 'settings':
                 self.settings.draw()
                 for event in pygame.event.get():
@@ -120,10 +121,13 @@ class Game:
                             self.state = 'startmenu'
                         else:
                             self.state = 'gameover'
+                self.clock.tick(30)
             elif self.state == 'gameover':
                 self.menu.selected_button = 0
                 while self.state == 'gameover':
                     self.menu.buttons[0]['text'] = 'Restart Game'
+                    self.menu.title = 'Game Over'
+                    self.menu.your_score = 'Your Score: {}'.format(self.score)
                     self.menu.draw()
                     for event in pygame.event.get():
                         if event.type == pygame.QUIT:
@@ -141,6 +145,7 @@ class Game:
                         elif action == 'quit':
                             pygame.quit()
                             quit()
+                self.clock.tick(30)
             else:
                 pygame.quit()
                 quit()
