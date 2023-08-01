@@ -108,9 +108,20 @@ class Settings:
     def __init__(self, screen):
         self.screen = screen
         self.font = pygame.font.SysFont('Minecraft Regular', 24)
+        # 读取配置文件
+        with open('config.ini', 'r') as f:
+            lines = f.readlines()
+        saved_settings = {}
+        for line in lines:
+            line = line.strip()
+            if line and not line.startswith('#'):
+                key, value = line.split('=')
+                saved_settings[key.strip()] = value.strip()
+        Difficulty = int(saved_settings.get('Difficulty', '0'))
+        Snake_Display = int(saved_settings.get('Snake_Display', '0'))
         self.options = [
-            {'text': 'Difficulty', 'current_level': DIFFICULTY[0], 'current_index': 0, 'min': 0, 'max': len(DIFFICULTY) - 1, 'option_type': DIFFICULTY},
-            {'text': 'Snake Display', 'current_level': SNAKE_DISPLAY[0], 'current_index': 0, 'min': 0, 'max': len(SNAKE_DISPLAY) - 1, 'option_type': SNAKE_DISPLAY}
+            {'text': 'Difficulty', 'current_level': DIFFICULTY[Difficulty], 'current_index': Difficulty, 'min': 0, 'max': len(DIFFICULTY) - 1, 'option_type': DIFFICULTY},
+            {'text': 'Snake Display', 'current_level': SNAKE_DISPLAY[Snake_Display], 'current_index': Snake_Display, 'min': 0, 'max': len(SNAKE_DISPLAY) - 1, 'option_type': SNAKE_DISPLAY}
         ]
         self.selected_option = 0
 
@@ -140,3 +151,8 @@ class Settings:
             elif event.key == pygame.K_ESCAPE:
                 return 'back'
         return None
+
+    def save_settings(self):
+        with open('config.ini', 'w') as f:
+            for option in self.options:
+                f.write('{} = {}\n'.format(option['text'].replace(' ', '_'), option['current_index']))

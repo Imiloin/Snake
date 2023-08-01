@@ -114,6 +114,8 @@ class Game:
                         quit()
                     action = self.settings.handle_event(event)
                     if action == 'back':
+                        self.settings.selected_option = 0
+                        self.settings.save_settings()
                         if self.try_count == 1:
                             self.state = 'startmenu'
                         else:
