@@ -32,14 +32,17 @@ class Game:
         self.food = Food()
         self.food.spawn(self.snake)
         self.score = 0
+        self.try_count = 1
         self.font = pygame.font.SysFont('Minecraft Regular', 20)
         self.menu = Menu(self.screen)
+        self.settings = Settings(self.screen)
         self.state = 'startmenu'
 
     def update(self, direction):
         self.snake.direction = direction
         self.snake.move(self.food)
         if self.snake.check_game_over():
+            self.try_count += 1
             self.state = 'gameover'
         self.score = self.snake.length - 1
 
@@ -99,10 +102,22 @@ class Game:
                     if action == 'start':
                         self.state = 'playing'
                     elif action == 'settings':
-                        pass
+                        self.state = 'settings'
                     elif action == 'quit':
                         pygame.quit()
                         quit()
+            elif self.state == 'settings':
+                self.settings.draw()
+                for event in pygame.event.get():
+                    if event.type == pygame.QUIT:
+                        pygame.quit()
+                        quit()
+                    action = self.settings.handle_event(event)
+                    if action == 'back':
+                        if self.try_count == 1:
+                            self.state = 'startmenu'
+                        else:
+                            self.state = 'gameover'
             elif self.state == 'gameover':
                 self.menu.selected_button = 0
                 while self.state == 'gameover':
@@ -120,7 +135,7 @@ class Game:
                             self.score = 0
                             self.state = 'playing'
                         elif action == 'settings':
-                            pass
+                            self.state = 'settings'
                         elif action == 'quit':
                             pygame.quit()
                             quit()
