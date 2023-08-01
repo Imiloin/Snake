@@ -1,8 +1,19 @@
+import pygame
 import random
 import Constants
 
 # 游戏常量
 BLOCK_SIZE = Constants.BLOCK_SIZE
+SCREEN_WIDTH = Constants.SCREEN_WIDTH
+SCREEN_HEIGHT = Constants.SCREEN_HEIGHT
+
+# 颜色常量
+BLACK = Constants.BLACK
+GRAY = Constants.GRAY
+WHITE = Constants.WHITE
+RED = Constants.RED
+GREEN = Constants.GREEN
+BLUE = Constants.BLUE
 
 # 其他常量
 GAME_WIDTH = Constants.SCREEN_WIDTH
@@ -59,3 +70,34 @@ class Food:
             if body_block == (x, y):
                 return False
         return True
+
+
+class Menu:
+    def __init__(self, screen):
+        self.screen = screen
+        self.font = pygame.font.SysFont('Minecraft Regular', 24)
+        self.buttons = [
+            {'text': 'Start Game', 'action': 'start'},
+            {'text': 'Settings', 'action': 'settings'},
+            {'text': 'Quit Game', 'action': 'quit'}
+        ]
+        self.selected_button = 0
+
+    def draw(self):
+        self.screen.fill(BLACK)
+        for i, button in enumerate(self.buttons):
+            text_surface = self.font.render(button['text'], True, WHITE if i == self.selected_button else GRAY)
+            text_rect = text_surface.get_rect()
+            text_rect.center = (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + i * 30)
+            self.screen.blit(text_surface, text_rect)
+        pygame.display.update()
+
+    def handle_event(self, event):
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_UP:
+                self.selected_button = (self.selected_button - 1) % len(self.buttons)
+            elif event.key == pygame.K_DOWN:
+                self.selected_button = (self.selected_button + 1) % len(self.buttons)
+            elif event.key == pygame.K_RETURN:
+                return self.buttons[self.selected_button]['action']
+        return None
