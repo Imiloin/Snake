@@ -26,6 +26,7 @@ GAME_HEIGHT = Constants.SCREEN_HEIGHT - Constants.PANEL_HEIGHT
 
 class Snake:
     def __init__(self):
+        # 蛇身为一个列表，每个元素为一个元组，表示一个方块的位置，列表第一个元素为蛇头
         self.body = [((GAME_WIDTH // 2 // BLOCK_SIZE) * BLOCK_SIZE, (GAME_HEIGHT // 2 // BLOCK_SIZE) * BLOCK_SIZE)]
         self.direction = 'right'
         self.length = 1
@@ -49,8 +50,10 @@ class Snake:
 
     def check_game_over(self):
         x, y = self.body[0]
+        # 超出边界
         if x < 0 or x >= GAME_WIDTH or y < 0 or y >= GAME_HEIGHT:
             return True
+        # 撞到自己
         for block in self.body[1:]:
             if block == self.body[0]:
                 return True
@@ -62,6 +65,7 @@ class Food:
         self.position = (0, 0)
 
     def spawn(self, snake):
+        # 随机生成食物格点位置
         x = random.randint(0, GAME_WIDTH // BLOCK_SIZE - 1) * BLOCK_SIZE
         y = random.randint(0, GAME_HEIGHT // BLOCK_SIZE - 1) * BLOCK_SIZE
         while not self.check_position(x, y, snake):
@@ -70,6 +74,7 @@ class Food:
         self.position = (x, y)
 
     def check_position(self, x, y, snake):
+        # 检查食物是否与蛇身重合，若重合则重新生成
         for body_block in snake.body[:]:
             if body_block == (x, y):
                 return False
@@ -103,7 +108,9 @@ class Menu:
         score_rect = score_surface.get_rect()
         score_rect.center = (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2)
         self.screen.blit(score_surface, score_rect)
+        # 绘制按钮
         for i, button in enumerate(self.buttons):
+            # 选中的按钮为白色，其他按钮为灰色
             text_surface = self.font.render(button['text'], True, WHITE if i == self.selected_button else GRAY)
             text_rect = text_surface.get_rect()
             text_rect.center = (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 3 * 2 + i * 48)
@@ -129,6 +136,7 @@ class Settings:
         with open('config.ini', 'r') as f:
             lines = f.readlines()
         saved_settings = {}
+        # 逐行读取配置文件中的设置，保存到字典中
         for line in lines:
             line = line.strip()
             if line and not line.startswith('#'):
@@ -147,6 +155,7 @@ class Settings:
 
     def draw(self):
         self.screen.fill(BLACK)
+        # enumerate()函数用于遍历序列中的元素以及它们的下标
         for i, option in enumerate(self.options):
             text_surface = self.font.render('{}: {}'.format(option['text'], option['current_level']), True,
                                             WHITE if i == self.selected_option else GRAY)
@@ -163,6 +172,7 @@ class Settings:
                 self.selected_option = (self.selected_option + 1) % len(self.options)
             elif event.key == pygame.K_LEFT or event.key == pygame.K_a:
                 option = self.options[self.selected_option]
+                # 直接修改字典中的值
                 option['current_index'] = max(option['min'], option['current_index'] - 1)
                 option['current_level'] = option['option_type'][option['current_index']]
             elif event.key == pygame.K_RIGHT or event.key == pygame.K_d:
@@ -177,6 +187,7 @@ class Settings:
         self.speed = SPEED[self.options[0]['current_index']]
         with open('config.ini', 'w') as f:
             for option in self.options:
+                # 将设置写入配置文件，config.ini 中空格用下划线代替，保存的是下标
                 f.write('{} = {}\n'.format(option['text'].replace(' ', '_'), option['current_index']))
 
 class Pause:
@@ -206,6 +217,7 @@ class Pause:
         score_rect = score_surface.get_rect()
         score_rect.center = (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2)
         self.screen.blit(score_surface, score_rect)
+        # 绘制按钮
         for i, button in enumerate(self.buttons):
             text_surface = self.font.render(button['text'], True, WHITE if i == self.selected_button else GRAY)
             text_rect = text_surface.get_rect()

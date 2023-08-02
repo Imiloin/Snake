@@ -50,9 +50,11 @@ class Game:
     def draw(self):
         self.screen.fill(BLACK)
         if self.settings.options[1]['current_index'] == 0:  # Default
+            # 蛇身为绿色
             for block in self.snake.body:
                 pygame.draw.rect(self.screen, GREEN, (block[0], block[1], BLOCK_SIZE, BLOCK_SIZE))
         elif self.settings.options[1]['current_index'] == 1:  # Gradient
+            # 构建蛇身绿色到黄色的渐变
             for i, block in enumerate(self.snake.body):
                 color = tuple(GREEN[j] + i * (YELLOW[j] - GREEN[j]) // len(self.snake.body) for j in range(3))
                 pygame.draw.rect(self.screen, color, (block[0], block[1], BLOCK_SIZE, BLOCK_SIZE))
@@ -73,7 +75,7 @@ class Game:
         pygame.display.update()
 
     def run(self):
-        tick = 500
+        tick = 500 # 保存上一帧的剩余时间
         direction = self.snake.direction
         while True:
             if self.state == 'playing':
