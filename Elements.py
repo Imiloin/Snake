@@ -17,6 +17,7 @@ WHITE = Constants.WHITE
 RED = Constants.RED
 GREEN = Constants.GREEN
 BLUE = Constants.BLUE
+YELLOW = Constants.YELLOW
 
 # 其他常量
 GAME_WIDTH = Constants.SCREEN_WIDTH

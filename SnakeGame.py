@@ -15,6 +15,7 @@ WHITE = Constants.WHITE
 RED = Constants.RED
 GREEN = Constants.GREEN
 BLUE = Constants.BLUE
+YELLOW = Constants.YELLOW
 
 # 其他常量
 GAME_WIDTH = SCREEN_WIDTH
@@ -47,8 +48,17 @@ class Game:
 
     def draw(self):
         self.screen.fill(BLACK)
-        for block in self.snake.body:
-            pygame.draw.rect(self.screen, GREEN, (block[0], block[1], BLOCK_SIZE, BLOCK_SIZE))
+        if self.settings.options[1]['current_index'] == 0:  # Default
+            for block in self.snake.body:
+                pygame.draw.rect(self.screen, GREEN, (block[0], block[1], BLOCK_SIZE, BLOCK_SIZE))
+        elif self.settings.options[1]['current_index'] == 1:  # Gradient
+            for i, block in enumerate(self.snake.body):
+                color = tuple(GREEN[j] + i * (YELLOW[j] - GREEN[j]) // len(self.snake.body) for j in range(3))
+                pygame.draw.rect(self.screen, color, (block[0], block[1], BLOCK_SIZE, BLOCK_SIZE))
+        else:
+            print('Error: Invalid Snake Display option index')
+            pygame.quit()
+            quit()
         pygame.draw.rect(self.screen, RED, (self.food.position[0], self.food.position[1], BLOCK_SIZE, BLOCK_SIZE))
         pygame.draw.line(self.screen, WHITE, (0, GAME_HEIGHT), (GAME_WIDTH, GAME_HEIGHT), 2)
         # 创建一个文本Surface对象
@@ -149,5 +159,6 @@ class Game:
                             quit()
                 self.clock.tick(30)
             else:
+                print('Error: Invalid game state')
                 pygame.quit()
                 quit()
