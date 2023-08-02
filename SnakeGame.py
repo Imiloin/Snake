@@ -35,6 +35,7 @@ class Game:
         self.try_count = 1
         self.font = pygame.font.SysFont('Minecraft Regular', 20)
         self.menu = Menu(self.screen)
+        self.pause = Pause(self.screen)
         self.settings = Settings(self.screen)
         self.state = 'startmenu'
 
@@ -92,6 +93,9 @@ class Game:
                                 direction = 'left'
                             elif (event.key == pygame.K_RIGHT or event.key == pygame.K_d) and self.snake.direction != 'left':
                                 direction = 'right'
+                            elif event.key == pygame.K_ESCAPE:
+                                self.state = 'pause'
+                            # 按键在接近下一帧时按下，直接更新
                             if tick < FRAME / 2:
                                 tick = FRAME
                                 self.update(direction)
@@ -104,6 +108,28 @@ class Game:
                     else:
                         pygame.time.delay(10)
                         tick -= 10
+            elif self.state == 'pause':
+                self.pause.selected_button = 0
+                self.pause.your_score = 'Current Score: {}'.format(self.score)
+                while self.state == 'pause':                  
+                    self.pause.draw()
+                    for event in pygame.event.get():
+                        if event.type == pygame.QUIT:
+                            pygame.quit()
+                            quit()
+                        action = self.pause.handle_event(event)
+                        if action == 'continue':
+                            self.state = 'playing'
+                        elif action == 'startmenu':
+                            self.menu.selected_button = 0
+                            self.menu.buttons[0]['text'] = 'Start Game'
+                            self.menu.your_score = 'by Imiloin'
+                            self.menu.title = 'Snake'
+                            self.state = 'startmenu'
+                        elif action == 'quit':
+                            pygame.quit()
+                            quit()
+                self.clock.tick(30)
             elif self.state == 'startmenu':
                 self.menu.draw()
                 for event in pygame.event.get():
@@ -112,6 +138,10 @@ class Game:
                         quit()
                     action = self.menu.handle_event(event)
                     if action == 'start':
+                        self.snake = Snake()
+                        self.food = Food()
+                        self.food.spawn(self.snake)
+                        self.score = 0
                         self.state = 'playing'
                     elif action == 'settings':
                         self.state = 'settings'
@@ -136,10 +166,10 @@ class Game:
                 self.clock.tick(30)
             elif self.state == 'gameover':
                 self.menu.selected_button = 0
-                while self.state == 'gameover':
-                    self.menu.buttons[0]['text'] = 'Restart Game'
-                    self.menu.title = 'Game Over'
-                    self.menu.your_score = 'Your Score: {}'.format(self.score)
+                self.menu.buttons[0]['text'] = 'Restart Game'
+                self.menu.title = 'Game Over'
+                self.menu.your_score = 'Your Score: {}'.format(self.score)
+                while self.state == 'gameover':                  
                     self.menu.draw()
                     for event in pygame.event.get():
                         if event.type == pygame.QUIT:

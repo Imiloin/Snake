@@ -178,3 +178,49 @@ class Settings:
         with open('config.ini', 'w') as f:
             for option in self.options:
                 f.write('{} = {}\n'.format(option['text'].replace(' ', '_'), option['current_index']))
+
+class Pause:
+    def __init__(self, screen):
+        self.screen = screen
+        self.title_font = pygame.font.SysFont('Minecraft Regular', 48)
+        self.score_font = pygame.font.SysFont('Minecraft Regular', 16, italic=True)
+        self.font = pygame.font.SysFont('Minecraft Regular', 24)
+        self.buttons = [
+            {'text': 'Continue', 'action': 'continue'},
+            {'text': 'Start Menu', 'action': 'startmenu'},
+            {'text': 'Quit Game', 'action': 'quit'}
+        ]
+        self.title = 'Pause'
+        self.your_score = None
+        self.selected_button = 0
+
+    def draw(self):
+        self.screen.fill(BLACK)
+        # 绘制标题
+        title_surface = self.title_font.render(self.title, True, BLUE)
+        title_rect = title_surface.get_rect()
+        title_rect.center = (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 4)
+        self.screen.blit(title_surface, title_rect)
+        # 绘制分数
+        score_surface = self.score_font.render(self.your_score, True, GRAY)
+        score_rect = score_surface.get_rect()
+        score_rect.center = (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2)
+        self.screen.blit(score_surface, score_rect)
+        for i, button in enumerate(self.buttons):
+            text_surface = self.font.render(button['text'], True, WHITE if i == self.selected_button else GRAY)
+            text_rect = text_surface.get_rect()
+            text_rect.center = (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 3 * 2 + i * 48)
+            self.screen.blit(text_surface, text_rect)
+        pygame.display.update()
+
+    def handle_event(self, event):
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_UP or event.key == pygame.K_w:
+                self.selected_button = (self.selected_button - 1) % len(self.buttons)
+            elif event.key == pygame.K_DOWN or event.key == pygame.K_s:
+                self.selected_button = (self.selected_button + 1) % len(self.buttons)
+            elif event.key == pygame.K_RETURN:
+                return self.buttons[self.selected_button]['action']
+            elif event.key == pygame.K_ESCAPE:
+                return 'continue'
+        return None
