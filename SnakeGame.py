@@ -1,5 +1,5 @@
-import pygame
-import Constants
+# import pygame
+# import Constants
 from Elements import *
 
 # 游戏常量
@@ -17,7 +17,6 @@ GREEN = Constants.GREEN
 BLUE = Constants.BLUE
 
 # 其他常量
-FRAME = 1000 // Constants.SPEED
 GAME_WIDTH = SCREEN_WIDTH
 GAME_HEIGHT = SCREEN_HEIGHT - PANEL_HEIGHT
 
@@ -63,35 +62,38 @@ class Game:
         pygame.display.update()
 
     def run(self):
-        tick = FRAME
+        tick = 500
         direction = self.snake.direction
         while True:
             if self.state == 'playing':
-                for event in pygame.event.get():
-                    if event.type == pygame.QUIT:
-                        pygame.quit()
-                        quit()
-                    elif event.type == pygame.KEYDOWN:
-                        if (event.key == pygame.K_UP or event.key == pygame.K_w) and self.snake.direction != 'down':
-                            direction = 'up'
-                        elif (event.key == pygame.K_DOWN or event.key == pygame.K_s) and self.snake.direction != 'up':
-                            direction = 'down'
-                        elif (event.key == pygame.K_LEFT or event.key == pygame.K_a) and self.snake.direction != 'right':
-                            direction = 'left'
-                        elif (event.key == pygame.K_RIGHT or event.key == pygame.K_d) and self.snake.direction != 'left':
-                            direction = 'right'
-                        if tick < FRAME / 2:
-                            tick = FRAME
-                            self.update(direction)
-                            self.draw()
+                FRAME = 1000 // self.settings.speed
+                tick = FRAME
+                while self.state == 'playing':
+                    for event in pygame.event.get():
+                        if event.type == pygame.QUIT:
+                            pygame.quit()
+                            quit()
+                        elif event.type == pygame.KEYDOWN:
+                            if (event.key == pygame.K_UP or event.key == pygame.K_w) and self.snake.direction != 'down':
+                                direction = 'up'
+                            elif (event.key == pygame.K_DOWN or event.key == pygame.K_s) and self.snake.direction != 'up':
+                                direction = 'down'
+                            elif (event.key == pygame.K_LEFT or event.key == pygame.K_a) and self.snake.direction != 'right':
+                                direction = 'left'
+                            elif (event.key == pygame.K_RIGHT or event.key == pygame.K_d) and self.snake.direction != 'left':
+                                direction = 'right'
+                            if tick < FRAME / 2:
+                                tick = FRAME
+                                self.update(direction)
+                                self.draw()
+                            pygame.time.delay(10)
+                    if tick <= 0:
+                        tick = FRAME
+                        self.update(direction)
+                        self.draw()
+                    else:
                         pygame.time.delay(10)
-                if tick <= 0:
-                    tick = FRAME
-                    self.update(direction)
-                    self.draw()
-                else:
-                    pygame.time.delay(10)
-                    tick -= 10
+                        tick -= 10
             elif self.state == 'startmenu':
                 self.menu.draw()
                 for event in pygame.event.get():
@@ -149,4 +151,3 @@ class Game:
             else:
                 pygame.quit()
                 quit()
-            # tick -= self.clock.tick(60)

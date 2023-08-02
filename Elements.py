@@ -8,6 +8,7 @@ SCREEN_WIDTH = Constants.SCREEN_WIDTH
 SCREEN_HEIGHT = Constants.SCREEN_HEIGHT
 DIFFICULTY = Constants.DIFFICULTY
 SNAKE_DISPLAY = Constants.SNAKE_DISPLAY
+SPEED = Constants.SPEED
 
 # 颜色常量
 BLACK = Constants.BLACK
@@ -140,6 +141,7 @@ class Settings:
             {'text': 'Snake Display', 'current_level': SNAKE_DISPLAY[Snake_Display], 'current_index': Snake_Display,
              'min': 0, 'max': len(SNAKE_DISPLAY) - 1, 'option_type': SNAKE_DISPLAY}
         ]
+        self.speed = SPEED[Difficulty]
         self.selected_option = 0
 
     def draw(self):
@@ -171,6 +173,7 @@ class Settings:
         return None
 
     def save_settings(self):
+        self.speed = SPEED[self.options[0]['current_index']]
         with open('config.ini', 'w') as f:
             for option in self.options:
                 f.write('{} = {}\n'.format(option['text'].replace(' ', '_'), option['current_index']))

@@ -6,7 +6,7 @@ BLOCK_SIZE = 10
 
 DIFFICULTY = ['Easy', 'Normal', 'Hard']
 SNAKE_DISPLAY = ['Default', 'Gradient']
-SPEED = 5
+SPEED = [3, 5, 10]  # 速度等级，与难度对应
 
 # 颜色常量
 BLACK = (0, 0, 0)
