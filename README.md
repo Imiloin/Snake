@@ -1,16 +1,14 @@
 # Snake
 
-a test repo - 测试用仓库
-
-一个简单的贪吃蛇小游戏
+基于 `pygame` 的简单贪吃蛇小游戏。
 
 ## Start
 
 ```bash
-git clone https://github.com/Imiloin/Snake
+git clone https://github.com/Imiloin/Snake.git
 cd Snake
 # tested in python 3.10, Windows
-pip install requirements.txt
+pip install -r requirements.txt
 python main.py
 ```
 
